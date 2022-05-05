@@ -13,14 +13,14 @@
       Wordle!
     </v-card-text>
 
-    <v-alert v-if="wordleGame.gameOver" max-width="80%" :type="gameResult.type">
+    <v-alert v-if="wordleGame.gameOver" width="80%" :type="gameResult.type">
       {{ gameResult.text }}
       <v-btn class="ml-2" @click="resetGame"> Play Again? </v-btn>
     </v-alert>
 
-    <!-- trying to get these centered on the page without being inline -->
-    <v-row justify="center"><game-board :wordleGame="wordleGame" /></v-row>
-    <v-row justify="center"><keyboard :wordleGame="wordleGame" /></v-row>
+    <game-board :wordleGame="wordleGame" />
+
+    <keyboard :wordleGame="wordleGame" />
   </v-container>
 </template>
 
@@ -44,11 +44,10 @@ export default class Game extends Vue {
 
   get gameResult() {
     if (this.wordleGame.state === GameState.Won) {
-      //make confetti like canvas
       return { type: 'success', text: 'Yay! You won!' }
     }
     if (this.wordleGame.state === GameState.Lost) {
-      return { type: 'error', text: 'You lost... :( The word was ${this.word}' }
+      return { type: 'error', text: `You lost... :( The word was ${this.word}` }
     }
     return { type: '', text: '' }
   }

@@ -11,12 +11,4 @@ describe('Word Service', () => {
   test('Words are private', () => {
     expect((WordsService as any).words).toBeUndefined()
   })
-
-  test('available word filter', () => {
-    const guess = 'ac???'
-    const words = WordsService.availableWords(guess)
-    expect(words).not.toBeNull()
-    expect(words).toHaveLength(3)
-    expect(words).toContain('acorn')
-  })
 })
