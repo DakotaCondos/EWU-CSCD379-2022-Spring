@@ -14,7 +14,7 @@ namespace Wordle.Api.Tests
     public class ScoreStatsServiceTests
     {
         private AppDbContext _context;
-        
+
         public ScoreStatsServiceTests()
         {
             var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
@@ -22,7 +22,7 @@ namespace Wordle.Api.Tests
             _context = new AppDbContext(contextOptions.Options);
             _context.Database.Migrate();
             ScoreStatsService.Seed(_context);
-            
+
         }
         [TestMethod]
         public void GetScoreStats()
@@ -37,16 +37,26 @@ namespace Wordle.Api.Tests
         {
             ScoreStatsService sut = new ScoreStatsService(_context);
             ScoreStat scoreStat1 = sut.GetScoreStats().First(f => f.Score == 1).Clone();
-            
-            sut.Update(1,2);
-            Assert.AreEqual((scoreStat1.TotalGames+1), sut.GetScoreStats().First(f => f.Score==1).TotalGames);
-            Assert.AreEqual(scoreStat1.AverageSeconds+(scoreStat1.AverageSeconds-2)/(scoreStat1.TotalGames+1), sut.GetScoreStats().First(f => f.Score == 1).AverageSeconds);
+
+            sut.Update(1, 2);
+            ShowScores(sut);
+            Assert.AreEqual((scoreStat1.TotalGames + 1), sut.GetScoreStats().First(f => f.Score == 1).TotalGames);
+            Assert.AreEqual(scoreStat1.AverageSeconds + (scoreStat1.AverageSeconds - 2) / (scoreStat1.TotalGames + 1), sut.GetScoreStats().First(f => f.Score == 1).AverageSeconds);
 
             ScoreStat scoreStat2 = sut.GetScoreStats().First(f => f.Score == 1).Clone();
             sut.Update(1, 4);
 
             Assert.AreEqual((scoreStat2.TotalGames + 1), sut.GetScoreStats().First(f => f.Score == 1).TotalGames);
             Assert.AreEqual(scoreStat2.AverageSeconds + (scoreStat2.AverageSeconds - 4) / (scoreStat2.TotalGames + 1), sut.GetScoreStats().First(f => f.Score == 1).AverageSeconds);
+        }
+
+        //methods
+        public void ShowScores(ScoreStatsService sut)
+        {
+            foreach (ScoreStat s in sut.GetScoreStats())
+            {
+                Console.WriteLine("TotalGames:"+s.TotalGames.ToString() + " Score:" + s.Score + "  AverageSeconds:" + s.AverageSeconds);
+            }
         }
     }
 }
