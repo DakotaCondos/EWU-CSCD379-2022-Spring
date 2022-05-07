@@ -39,8 +39,9 @@ namespace Wordle.Api.Services
             return _scores;
         }
 
-        //returns up to top 10 scores hopefully
-        //[(7-AverageGuesses)*NumberGames] for order of list as a sort of "lifetime" score
+        // Each winning game is worth up to 6 points
+        // Points earned are equal to 7 - number of turns taken to complete
+        // Total score is equal to points earned * number of games
         public List<Score> GetTop10Scores()
         {
             var scores = new List<Score>();
